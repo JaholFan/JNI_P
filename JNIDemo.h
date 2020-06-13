@@ -17,11 +17,11 @@ JNIEXPORT void JNICALL Java_JNIDemo_java_1hello
 
 /*
  * Class:     JNIDemo
- * Method:    get_val
- * Signature: (I)I
+ * Method:    sum
+ * Signature: (II)I
  */
-JNIEXPORT jint JNICALL Java_JNIDemo_get_1val
-  (JNIEnv *, jobject, jint);
+JNIEXPORT jint JNICALL Java_JNIDemo_sum
+  (JNIEnv *, jobject, jint, jint);
 
 #ifdef __cplusplus
 }

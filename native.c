@@ -14,8 +14,14 @@ void c_hello(JNIEnv * jenv, jobject obj)
     printf("c hello\n");
 }
 
+int c_sum(JNIEnv * jenv, jobject obj,int a,int b)
+{
+    return a+b;
+}
+
 static const JNINativeMethod methods[] = {
 	{"java_hello", "()V", (void *)c_hello},
+	{"sum", "(II)I", (void *)c_sum},
 };
 
 JNIEXPORT jint JNICALL
@@ -34,7 +40,7 @@ JNI_OnLoad(JavaVM *jvm, void *reserved)
 		return JNI_ERR;
 	}
     /*2.register map:java_hello -- c_hello*/
-	if((*env)->RegisterNatives(env, cls, methods, 1) < 0)
+	if((*env)->RegisterNatives(env, cls, methods, 2) < 0)
         return JNI_ERR;
 	return JNI_VERSION_1_2;
 }
