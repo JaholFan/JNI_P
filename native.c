@@ -1,5 +1,6 @@
 #include <jni.h> 
 #include <stdio.h>
+#include <stdlib.h>
 
 #if 0
 typedef struct {
@@ -28,10 +29,46 @@ jstring c_exchangeString(JNIEnv * env, jobject obj, jstring str)
     return (*env)->NewStringUTF(env, "handsome man");
 }
 
+jintArray c_invertNum(JNIEnv * env, jobject obj, jintArray arr)
+{
+    jint *carr;
+	jint * tempArray;
+	jint len = 0;
+	jintArray returnArray;
+    jint i = 0;
+	carr = (*env)->GetIntArrayElements(env, arr, NULL);
+	if (carr == NULL) {
+        printf("carr is NULL\n");
+		return 0; /* exception occurred */
+	}
+	len = (*env)->GetArrayLength(env,arr);
+	tempArray = malloc(sizeof(int)*len);
+	if(tempArray == NULL){
+        printf("tempArray is NULL\n");
+		(*env)->ReleaseIntArrayElements(env,arr,carr,0);
+		return 0;
+	}
+	for(i=0;i<len;i++){
+		tempArray[i] = carr[len-i-1];
+	}
+	(*env)->ReleaseIntArrayElements(env,arr,carr,0);
+
+	returnArray = (*env)->NewIntArray(env,len);
+	if( returnArray ==NULL ){
+        printf("returnArray is NULL\n");
+		return 0;
+	}
+
+	(*env)->SetIntArrayRegion(env,returnArray,0,len,tempArray);
+	free(tempArray);
+	return returnArray;
+}
+
 static const JNINativeMethod methods[] = {
 	{"java_hello", "()V", (void *)c_hello},
 	{"sum", "(II)I", (void *)c_sum},
 	{"exchangeString", "(Ljava/lang/String;)Ljava/lang/String;", (void *)c_exchangeString},
+	{"invertNum", "([I)[I", (void *)c_invertNum},
 };
 
 JNIEXPORT jint JNICALL
@@ -50,7 +87,7 @@ JNI_OnLoad(JavaVM *jvm, void *reserved)
 		return JNI_ERR;
 	}
     /*2.register map:java_hello -- c_hello*/
-	if((*env)->RegisterNatives(env, cls, methods, 3) < 0)
+	if((*env)->RegisterNatives(env, cls, methods, 4) < 0)
         return JNI_ERR;
 	return JNI_VERSION_1_2;
 }

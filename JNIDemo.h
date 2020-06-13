@@ -31,6 +31,14 @@ JNIEXPORT jint JNICALL Java_JNIDemo_sum
 JNIEXPORT jstring JNICALL Java_JNIDemo_exchangeString
   (JNIEnv *, jobject, jstring);
 
+/*
+ * Class:     JNIDemo
+ * Method:    invertNum
+ * Signature: ([I)[I
+ */
+JNIEXPORT jintArray JNICALL Java_JNIDemo_invertNum
+  (JNIEnv *, jobject, jintArray);
+
 #ifdef __cplusplus
 }
 #endif
