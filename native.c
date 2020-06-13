@@ -9,19 +9,29 @@ typedef struct {
 } JNINativeMethod;
 #endif
 
-void c_hello(JNIEnv * jenv, jobject obj)
+void c_hello(JNIEnv * env, jobject obj)
 {
     printf("c hello\n");
 }
 
-int c_sum(JNIEnv * jenv, jobject obj,int a,int b)
+int c_sum(JNIEnv * env, jobject obj,jint a,jint b)
 {
     return a+b;
+}
+
+jstring c_exchangeString(JNIEnv * env, jobject obj, jstring str)
+{
+    const jbyte *cstr;
+    cstr = (*env)->GetStringUTFChars(env, str, NULL); 
+    printf("String from java is: %s\n",cstr);
+    (*env)->ReleaseStringUTFChars(env, str, cstr);
+    return (*env)->NewStringUTF(env, "handsome man");
 }
 
 static const JNINativeMethod methods[] = {
 	{"java_hello", "()V", (void *)c_hello},
 	{"sum", "(II)I", (void *)c_sum},
+	{"exchangeString", "(Ljava/lang/String;)Ljava/lang/String;", (void *)c_exchangeString},
 };
 
 JNIEXPORT jint JNICALL
@@ -40,7 +50,7 @@ JNI_OnLoad(JavaVM *jvm, void *reserved)
 		return JNI_ERR;
 	}
     /*2.register map:java_hello -- c_hello*/
-	if((*env)->RegisterNatives(env, cls, methods, 2) < 0)
+	if((*env)->RegisterNatives(env, cls, methods, 3) < 0)
         return JNI_ERR;
 	return JNI_VERSION_1_2;
 }

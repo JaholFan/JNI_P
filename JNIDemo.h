@@ -23,6 +23,14 @@ JNIEXPORT void JNICALL Java_JNIDemo_java_1hello
 JNIEXPORT jint JNICALL Java_JNIDemo_sum
   (JNIEnv *, jobject, jint, jint);
 
+/*
+ * Class:     JNIDemo
+ * Method:    exchangeString
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_JNIDemo_exchangeString
+  (JNIEnv *, jobject, jstring);
+
 #ifdef __cplusplus
 }
 #endif

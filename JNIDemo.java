@@ -9,11 +9,13 @@ public class JNIDemo{
     }
     public native void java_hello(); //declaration here,which implementation is in native c source file
     public native int sum(int a,int b);
+    public native String exchangeString(String str);
     public static void main(String[] args){
         /*2.map:java_hello -- c_hello*/
         /*3.invoke*/
         JNIDemo jd = new JNIDemo();
         jd.java_hello();
         System.out.println("1+2="+jd.sum(1,2));
+        System.out.println("the String from C is: "+jd.exchangeString("Jahol Fan"));
     }
 }
